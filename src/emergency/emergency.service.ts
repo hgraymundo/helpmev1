@@ -24,9 +24,9 @@ export class EmergencyService {
   findOne(id: string) {
     return this.emergency.findOne({ _id: id }).populate('user');
   }
-
+  
   findEmergenciesByUser(id: string) {
-    return this.emergency.find({ user: id });
+    return this.emergency.find({ user: id }).populate('user');
   }
 
   // update(id: number, updateEmergencyDto: UpdateEmergencyDto) {

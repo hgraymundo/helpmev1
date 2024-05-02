@@ -20,6 +20,9 @@ export class ContactService {
     return this.contactModel.find({ user: id });
   }
 
+  findbyUser(id: string) {
+    return this.contactModel.find({ user: id }).populate('user');
+  }
 
   update(id: string, updateContact: Contact) {
     return  this.contactModel.findByIdAndUpdate(id, updateContact);
