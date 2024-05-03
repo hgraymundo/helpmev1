@@ -12,22 +12,6 @@ export class EmergencyController {
 
   @Post()
   create(@Body() createEmergency: any) {
-    // console.log(createEmergency);
-    // const data = {
-    //   "message": "Emergencia de" + createEmergency.user.name,
-    //   "numbers": "2722355255,5560665098",
-    //   "country_code": "52"
-    // }
-    // const headers = {
-    //   "apikey": "b9853b0d624f67283c38e9da2bed197639a6e486"
-    // }
-
-    // this.httpService.post('https://api.smsmasivos.com.mx/sms/send', data, { headers: headers } ).subscribe(res => {
-    //    console.log(res);
-    // })
-
-    // return createEmergency;
-    
     const data = this.emergencyService.create(createEmergency).then(data => {
       const _contacts = this.contactService.findbyUser(createEmergency.user).then(contacts => {
         var __contacts = "";
@@ -36,20 +20,12 @@ export class EmergencyController {
          __contacts += contact.cellphone + ",";
         name = contact.user.name + " " + contact.user.lastname + " " + contact.user.mlastname;
         })
-        
-        console.log(name);
-        console.log(createEmergency.lat);
-        console.log(createEmergency.lon);
-        console.log(__contacts);
         this.sendSMS(name, __contacts.substring(0, __contacts.length - 1), createEmergency.lat, createEmergency.lon);
         this.getTokenTelegram( name, createEmergency.lat, createEmergency.lon);
       })
-
       return data;
     })
-
-   return data;
-
+   //return data;
   }
 
   // @Get()
@@ -65,11 +41,7 @@ export class EmergencyController {
   @Get('user/:id')
   findEmergenciesByUser(@Param('id') id: string) {
 
-    
     return this.emergencyService.findEmergenciesByUser(id);
-
-
-
   }
 
   sendSMS( name: string, numbers: string, lat: string, lon: string) {
@@ -127,7 +99,7 @@ export class EmergencyController {
     })
     
   }
-
+  
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateEmergencyDto: UpdateEmergencyDto) {
   //   return this.emergencyService.update(+id, updateEmergencyDto);

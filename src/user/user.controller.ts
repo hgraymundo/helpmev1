@@ -9,7 +9,20 @@ export class UserController {
 
   @Post()
   create(@Body() createUser: any) {
-    return this.userService.create(createUser);
+    var data = createUser
+    data.status = "false"
+    data.code = 0;
+    return this.userService.create(data);
+  }
+
+  @Post('getToken')
+  activate(@Body() activateUser: any) {
+    return this.userService.getToken(activateUser);
+  }
+
+  @Post('login')
+  login(@Body() loginUser: any) {
+    return this.userService.login(loginUser);
   }
 
   // @Get()
@@ -26,6 +39,13 @@ export class UserController {
   update(@Param('id') id: string, @Body() updateUser: any) {
     return this.userService.update(id, updateUser);
   }
+
+
+
+  // @Get('activate/:id')
+  // activate(@Param('id') id: string) {
+  //   return this.userService.activate(id);
+  // } 
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

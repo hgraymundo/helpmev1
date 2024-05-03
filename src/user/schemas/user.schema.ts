@@ -17,6 +17,11 @@ export class User {
     state: string;
     @Prop({ required: true })
     municipality: string;
+    @Prop({ required: false, default: false }) 
+    status: string
+    @Prop({defaul:"0"})
+    code: string
+
 
 }
 
