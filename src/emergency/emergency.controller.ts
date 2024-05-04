@@ -20,7 +20,7 @@ export class EmergencyController {
         var number="";
         contacts.forEach(contact => { 
          __contacts += contact.cellphone + ",";
-        name = contact.user.name + " " + contact.user.lastname + " " + contact.user.mlastname;
+        name = contact.user.name + " " + contact.user.lastname;
         number = contact.user.cellphone;
         })
         console.log(number)
@@ -52,7 +52,7 @@ export class EmergencyController {
   sendSMS( name: string, number: string, numbers: string, lat: string, lon: string) {
  
      const data = {
-        "message": "Emergencia de " +  name + " con el numero de telefono:" + numbers + " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16",
+        "message": "Emergencia:" +  name + " numero:" + number + " ubicado: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16",
         "numbers": numbers,
         "country_code": "52" 
       }
@@ -61,7 +61,7 @@ export class EmergencyController {
       }
   
       this.httpService.post('https://api.smsmasivos.com.mx/sms/send', data, { headers: headers } ).subscribe(res => {
-         //console.log(res);
+         console.log(res);
       })
   }
 
@@ -84,7 +84,7 @@ export class EmergencyController {
           'Authorization': token, 
           'Content-Type': 'application/json'
         }
-        const message = "Emergencia de " +  name + " con el numero de telefono: " + number + " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16"
+        const message = "Emergencia de:" +  name + " con el numero de telefono: " + number + " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16"
 
         let data = JSON.stringify({
           query: `mutation setMensajeTelegram($Remitente:String!, $Mensaje:String!) {
