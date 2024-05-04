@@ -19,12 +19,13 @@ export class EmergencyController {
         var name ="";
         var number="";
         contacts.forEach(contact => { 
-         __contacts += contact.user.cellphone + ",";
+         __contacts += contact.cellphone + ",";
         name = contact.user.name + " " + contact.user.lastname + " " + contact.user.mlastname;
         number = contact.user.cellphone;
         })
         console.log(number)
-        this.sendSMS(name, number , __contacts.substring(0, __contacts.length - 1), createEmergency.lat, createEmergency.lon);
+        console.log( __contacts.substring(0, __contacts.length - 1)) 
+        this.sendSMS(name, number, __contacts.substring(0, __contacts.length - 1), createEmergency.lat, createEmergency.lon);
         this.getTokenTelegram( name, number, createEmergency.lat, createEmergency.lon);
       })
       return data;
@@ -51,16 +52,16 @@ export class EmergencyController {
   sendSMS( name: string, number: string, numbers: string, lat: string, lon: string) {
  
      const data = {
-        "message": "Emergencia de " +  name + " con el numero de telefono: " + number + "- localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16",
+        "message": "Emergencia de " +  name + " con el numero de telefono:" + numbers + " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16",
         "numbers": numbers,
-        "country_code": "52"
+        "country_code": "52" 
       }
       const headers = {
         "apikey": "9a2332e43183a74fc1259ba5762f108dd2b45fde"
       }
   
       this.httpService.post('https://api.smsmasivos.com.mx/sms/send', data, { headers: headers } ).subscribe(res => {
-         console.log(res);
+         //console.log(res);
       })
   }
 
