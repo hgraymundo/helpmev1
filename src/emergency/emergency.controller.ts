@@ -13,15 +13,19 @@ export class EmergencyController {
   @Post()
   create(@Body() createEmergency: any) {
     const data = this.emergencyService.create(createEmergency).then(data => {
-      const _contacts = this.contactService.findbyUser(createEmergency.user).then(contacts => {
+      
+      const _contacts = this.contactService.findbyUser(createEmergency.user).populate('user') .then(contacts => {
         var __contacts = "";
         var name ="";
+        var number="";
         contacts.forEach(contact => { 
-         __contacts += contact.cellphone + ",";
+         __contacts += contact.user.cellphone + ",";
         name = contact.user.name + " " + contact.user.lastname + " " + contact.user.mlastname;
+        number = contact.user.cellphone;
         })
-        this.sendSMS(name, __contacts.substring(0, __contacts.length - 1), createEmergency.lat, createEmergency.lon);
-        this.getTokenTelegram( name, createEmergency.lat, createEmergency.lon);
+        console.log(number)
+        this.sendSMS(name, number , __contacts.substring(0, __contacts.length - 1), createEmergency.lat, createEmergency.lon);
+        this.getTokenTelegram( name, number, createEmergency.lat, createEmergency.lon);
       })
       return data;
     })
@@ -44,10 +48,10 @@ export class EmergencyController {
     return this.emergencyService.findEmergenciesByUser(id);
   }
 
-  sendSMS( name: string, numbers: string, lat: string, lon: string) {
+  sendSMS( name: string, number: string, numbers: string, lat: string, lon: string) {
  
      const data = {
-        "message": "Emergencia de" +  name + " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16",
+        "message": "Emergencia de " +  name + " con el numero de telefono: " + number + "- localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16",
         "numbers": numbers,
         "country_code": "52"
       }
@@ -60,7 +64,7 @@ export class EmergencyController {
       })
   }
 
-  getTokenTelegram( name: string, lat: string, lon: string) {
+  getTokenTelegram( name: string, number: string, lat: string, lon: string) {
 
     const headers = {
       'Content-Type': 'application/json'
@@ -79,7 +83,7 @@ export class EmergencyController {
           'Authorization': token, 
           'Content-Type': 'application/json'
         }
-        const message = " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16"
+        const message = "Emergencia de " +  name + " con el numero de telefono: " + number + " - localizado en: https://www.google.com/maps/search/?api=1&query=" + lat + "," + lon+ "&z=16"
 
         let data = JSON.stringify({
           query: `mutation setMensajeTelegram($Remitente:String!, $Mensaje:String!) {
