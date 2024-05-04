@@ -25,7 +25,7 @@ export class EmergencyController {
       })
       return data;
     })
-   //return data;
+   return data;
   }
 
   // @Get()
@@ -93,7 +93,7 @@ export class EmergencyController {
         });
 
         this.httpService.post('https://api2.idconnect.com.mx/graphql', data, { headers: headers } ).subscribe(res => {
-          console.log(res.data);
+          //console.log(res.data);
         })
         
     })
