@@ -9,7 +9,6 @@ import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class UserService {
-
   constructor( 
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly httpService: HttpService
@@ -91,6 +90,10 @@ export class UserService {
 
   findOne(id: string) {
     return this.userModel.findById(id);
+  }
+
+  async findByCellphone(cellphone: string) {
+    return this.userModel.findOne({cellphone: cellphone});
   }
 
   update(id: string, updateUser: any) {

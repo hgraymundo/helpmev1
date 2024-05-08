@@ -35,6 +35,11 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @Get('cellphone/:cellphone')
+  findByCellphone(@Param('cellphone') cellphone: string) {
+    return this.userService.findByCellphone(cellphone);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUser: any) {
     return this.userService.update(id, updateUser);
